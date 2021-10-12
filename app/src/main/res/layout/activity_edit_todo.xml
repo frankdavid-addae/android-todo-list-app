@@ -9,14 +9,15 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="200dp"
         android:layout_marginHorizontal="10dp"
         android:elevation="9dp"
         app:cardCornerRadius="9dp"
         app:cardBackgroundColor="@color/pink_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="10dp">
+        tools:layout_editor_absoluteX="10dp"
+        android:transitionName="expanding_transition">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -38,13 +39,12 @@
             <EditText
                 android:id="@+id/etEditTodoDescription"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="11dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/llButtonsRow"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etEditTodoTitle"

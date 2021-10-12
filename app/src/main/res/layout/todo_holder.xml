@@ -8,7 +8,8 @@
     android:layout_marginHorizontal="14dp"
     android:elevation="9dp"
     app:cardCornerRadius="9dp"
-    app:cardBackgroundColor="@color/pink_500">
+    app:cardBackgroundColor="@color/pink_500"
+    android:transitionName="expanding_transition">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

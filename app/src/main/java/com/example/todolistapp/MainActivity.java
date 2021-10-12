@@ -1,14 +1,22 @@
 package com.example.todolistapp;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -101,8 +109,46 @@ public class MainActivity extends AppCompatActivity {
     public void getTodos() {
         todos = readTodos();
 
-        todoAdapter = new TodoAdapter(todos, this);
+        todoAdapter = new TodoAdapter(todos, this, new TodoAdapter.ItemClicked() {
+            @Override
+            public void onClick(View view, int position) {
+                editTodo(todos.get(position).getId(), view);
+            }
+        });
 
         rvTodos.setAdapter(todoAdapter);
+    }
+
+    private void editTodo(int todoId, View view) {
+        TodoHandler todoHandler = new TodoHandler(this);
+        Todo todo = todoHandler.readTodo(todoId);
+
+        Intent intent = new Intent(this, EditTodoActivity.class);
+        intent.putExtra("id", todo.getId());
+        intent.putExtra("title", todo.getTitle());
+        intent.putExtra("description", todo.getDescription());
+
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this, view, ViewCompat.getTransitionName(view));
+        startActivityForResult(intent,1, optionsCompat.toBundle());
+
+//        registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(),
+//                new ActivityResultCallback<ActivityResult>() {
+//                    @Override
+//                    public void onActivityResult(ActivityResult result) {
+//
+//                    }
+//                }
+//        );
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            getTodos();
+        }
     }
 }
