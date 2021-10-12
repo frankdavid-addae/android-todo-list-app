@@ -1,7 +1,9 @@
 package com.example.todolistapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,6 +68,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         rvTodos.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+        ItemTouchHelper.SimpleCallback itemTouchCallback = new ItemTouchHelper.SimpleCallback(
+                0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(
+                    @NonNull RecyclerView recyclerView,
+                    @NonNull RecyclerView.ViewHolder viewHolder,
+                    @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                new TodoHandler(MainActivity.this).deleteTodo(todos.get(viewHolder.getAdapterPosition()).getId());
+                todos.remove(viewHolder.getAdapterPosition());
+                todoAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(rvTodos);
 
         getTodos();
     }
